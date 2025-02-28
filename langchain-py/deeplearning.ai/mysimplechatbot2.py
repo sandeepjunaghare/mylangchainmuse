@@ -82,11 +82,13 @@ class cbfs(param.Parameterized):
     super(cbfs, self).__init__(**params)
 
     self.panels = []
+
     self.loaded_file = "/Users/sandeep/Dropbox/dev/projects/langchain/langchain-js/dllangchain/data/Lecture3.pdf"
     self.qa = load_db(self.loaded_file, "stuff", 4)
 
-"""
+
   def call_load_db(self, count):
+
     if count == 0 or file_input.value is None: # init or no file specified :
       #return pn.pane.Markdown(f"Loaded File: {self.loaded_file}") 
       return sg.Pane.Markdown(f"Loaded File: {self.loaded_file}")
@@ -99,7 +101,11 @@ class cbfs(param.Parameterized):
     self.clr_history()
     #return pn.pane.Markdown(f"Loaded File: {self.loaded_file}")
     return sg.Pane.Markdown(f"Loaded File: {self.loaded_file}")
-
+  
+  def clr_history(self):
+    self.chat_history = []
+    return
+"""
   def convchain(self, query):
     if not query:
     #  return pn.WidgetBox(pn.Row('User:', pn.pane.Markdown("", width=600)), scroll=True)
@@ -150,17 +156,15 @@ class cbfs(param.Parameterized):
     return pn.WidgetBox(*rlist, width=600, scroll=True)
  
 
-  def clr_history(self):
-    self.chat_history = []
-    return
   
-"""
   
-cb = cbfs()
+
+  
 
 
 
-"""
+
+
 file_input = pn.widgets.FileInput(accept=".pdf")
 button_load = pn.widgets.Button(name="Load DB", button_type="primary")
 button_clearhistory = pn.widgets.Button(name="Clear History", button_type="warning")
@@ -172,9 +176,9 @@ conversation = pn.bind(cb.convchain, inp)
 
 jpg_pane = pn.pane.Image('./img/chain.jpeg')
 
-"""
-file_input = sg.FileBrowse(file_types = ".pdf")
-button_load = sg.Button(button_text="Load DB", key="load_db")
+
+#file_input = sg.FileBrowse(file_types = ".pdf", key="file_input-tab4")
+#button_load = sg.Button(button_text="Load DB", key="load_db-tab4")
 # button_load.Click(cb.call_load_db())
 
 #button_clearhistory = sg.Button(button_text="Clear History", key="clear_history")
@@ -185,8 +189,9 @@ button_load = sg.Button(button_text="Load DB", key="load_db")
 #conversation = cb.convchain(inp)
 #jpg_pane = sg.Image('./img/mychain.png')
 
+"""
 
-
+cb = cbfs()
 
 # Simple example of TabGroup element and the options available to it
 sg.theme('Dark Green')     # Please always add color to your window
@@ -195,11 +200,11 @@ tab1_layout = [
               #[sg.Text('Conversation')],
                #[sg.Text('Put your layout in here')],
                 #[sg.Input(default_text='Enter text here ...', key='-IN1-TAB1-'), sg.Button('Send Question')],
-                [sg.ML(size=(85, 3), enter_submits=True, key='query', do_not_clear=False),
+                [sg.ML(size=(85, 3), enter_submits=True, key='query-tab1', do_not_clear=False),
                  sg.Button('SEND', button_color=(sg.YELLOWS[0], sg.BLUES[0]), bind_return_key=True), sg.Button('EXIT', button_color=(sg.YELLOWS[0], sg.GREENS[0]))],
                 [sg.HorizontalSeparator(color='black')],
                 [sg.Text('Command History'),
-                 sg.Text('', size=(20, 3), key='history')],
+                 sg.Text('', size=(20, 3), key='history-tab1')],
                 [sg.HorizontalSeparator(color='black')],
                 [sg.Output(background_color='white', font=('Helvetica 10'), size=(127, 30))],
                #[sg.Text('Input something'), sg.Input(size=(12,1), key='-IN2-TAB1-')]
@@ -207,8 +212,13 @@ tab1_layout = [
 
 tab2_layout = [[sg.Text('Database')]]
 tab3_layout = [[sg.Text('Chat History')]]
+
 tab4_layout = [[sg.Text('Configure')],
-                [sg.Text('Choose File'), file_input, button_load ], ]
+               [sg.InputText(s=90, key="-fileName-tab4"), sg.FileBrowse("Browse"), sg.Button(button_text="Load DB", key="load_db-tab4")],
+               [sg.HorizontalSeparator(color='black')],
+               [sg.Button('Clear History', button_color=(sg.YELLOWS[0], sg.BLUES[0]), bind_return_key=True, key='clear_history-tab4')],
+               [sg.HorizontalSeparator(color='black')]]
+              # [sg.Text('Choose File'), file_input, button_load ] 
 
 # The TabgGroup layout - it must contain only Tabs
 tab_group_layout = [[sg.Tab('Conversation', tab1_layout, key='-TAB1-'),
@@ -233,7 +243,8 @@ history_offset = 0          # used to navigate command history
 
 while True:
     event, values = window.read()       # type: str, dict
-   # print(event, values)
+    print(event, values)
+    #console.log(f' event:: {event} and values:: {values}')
 
     if event == sg.WIN_CLOSED:
         break
@@ -241,21 +252,30 @@ while True:
     
     # handle button clicks
     if event == 'SEND':
-        query = values["query"].rstrip()
+        query = values["query-tab1"].rstrip()
+       # console.log(f' event SEND:: The command you entered was {query}')
         # execute your command here
         
         print(' The command you entered was {}'.format(query))
         command_history.append(query)
         history_offset = len(command_history) - 1
-        window['query'].update('')
+        window['query-tab1'].update('')
         window['history'].update('\n'.join(command_history[-3:]))
         #cb.convchain(values["query"])
         #print(f'You entered: {values["-IN1-TAB1-"]}')
         #window['-IN1-TAB1-'].update('')
     elif event in (sg.WIN_CLOSED, 'EXIT'):            # quit if exit event or X
         break
-    if event == 'load_db':
-        print(f' you clicked {event}')
+    if event == 'load_db-tab4':
+        print(f' load_db::you clicked {event}')
+        cb.call_load_db()
+    if event == 'file_input-tab4':
+        print(f' file input tab4::you clicked {event}')   
+        
+    if event == 'clear_history-tab4':
+        print(f' clear history tab4::you clicked {event}')
+        cb.clr_history()
+
 
 """
     if event == 'Invisible':

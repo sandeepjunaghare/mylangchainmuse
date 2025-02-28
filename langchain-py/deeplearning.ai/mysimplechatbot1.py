@@ -81,7 +81,6 @@ class cbfs(param.Parameterized):
   def __init__(self, **params):
     super(cbfs, self).__init__(**params)
 
-
     self.panels = []
     self.loaded_file = "/Users/sandeep/Dropbox/dev/projects/langchain/langchain-js/dllangchain/data/Lecture3.pdf"
     self.qa = load_db(self.loaded_file, "stuff", 4)

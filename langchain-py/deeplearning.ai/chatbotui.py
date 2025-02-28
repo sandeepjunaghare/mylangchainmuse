@@ -155,6 +155,7 @@ cb = cbfs()
 
 file_input = pn.widgets.FileInput(accept=".pdf")
 button_load = pn.widgets.Button(name="Load DB", button_type="primary")
+bound_button_load = pn.bind(cb.call_load_db, button_load.param.clicks)
 button_clearhistory = pn.widgets.Button(name="Clear History", button_type="warning")
 button_clearhistory.on_click(cb.clr_history)
 inp = pn.widgets.TextInput(placeholder="Enter text here...")

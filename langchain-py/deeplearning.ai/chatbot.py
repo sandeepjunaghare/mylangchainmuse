@@ -69,6 +69,7 @@ def load_db(file, chain_type, k):
 
 
 class cbfs(param.Parameterized):
+  
   chat_history = param.List([])
   answer = param.String("")
   db_query = param.String("")
@@ -124,7 +125,7 @@ class cbfs(param.Parameterized):
     if not self.db_response:
      return
     rlist=[pn.Row(pn.pane.Markdown(f"Result of DB lookup:", styles={'background-color': '#F6F6F6'}))]
-    for doc in self.db_respnose:
+    for doc in self.db_response:
       rlist.append(pn.Row(pn.pane.Str(doc)))
     return pn.WidgetBox(*rlist, width=600, scroll=True)
   

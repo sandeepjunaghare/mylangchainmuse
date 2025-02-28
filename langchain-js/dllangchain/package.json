@@ -1,0 +1,40 @@
+{
+  "name": "dllangchain",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc --declaration --outDir dist/",
+    "start": "tsx -r dotenv/config index.ts",
+    "start:dist": "npm build && node -r dotenv/config dist/index.js",
+    "lint": "eslint src",
+    "lint:fix": "npm lint --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "typescript": "^5.4.2"
+  },
+  "dependencies": {
+    "@langchain/community": "^0.0.35",
+    "@langchain/core": "^0.1.43",
+    "@langchain/openai": "^0.0.25",
+    "@notionhq/client": "^2.2.15",
+    "@types/request": "^2.48.12",
+    "axios": "^1.6.8",
+    "cheerio": "^1.0.0-rc.12",
+    "deno": "^0.1.1",
+    "express": "^4.19.2",
+    "ignore": "^5.3.1",
+    "langchain": "^0.1.25",
+    "ml-distance": "^4.0.1",
+    "node-fetch": "^3.3.2",
+    "notion-to-md": "^3.1.1",
+    "pdf-parse": "^1.1.1",
+    "youtube-transcript": "^1.2.1",
+    "youtubei.js": "^9.3.0"
+  }
+}
